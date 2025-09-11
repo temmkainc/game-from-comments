@@ -10,17 +10,35 @@ namespace Comments.Level
         public int CurrentHealth { get; private set; }
 
         private readonly DeathZone _deathZone;
+        private readonly PlayerUI _ui;
 
-        public PlayerHealth(DeathZone deathZone)
+        public PlayerHealth(DeathZone deathZone, PlayerUI ui)
         {
+            _ui = ui;
             _deathZone = deathZone;
             CurrentHealth = MaxHealth;
             _deathZone.PlayerEnteredEvent += On_PlayerEnteredDeathZone;
+
+            CurrentHealth = MaxHealth;
+            _ui.SetHealthBar(value: (float)CurrentHealth / MaxHealth);
+        }
+
+        public void ResetHealth()
+        {
+            SetHealth(MaxHealth);
         }
 
         public void ChangeHealth(int value)
         {
             CurrentHealth += value;
+            _ui.SetHealthBar(value: (float)CurrentHealth / MaxHealth);
+            CheckForDeath();
+        }
+
+        private void SetHealth(int value)
+        {
+            CurrentHealth = value;
+            _ui.SetHealthBar(value: (float)CurrentHealth / MaxHealth);
             CheckForDeath();
         }
 
@@ -28,15 +46,13 @@ namespace Comments.Level
         {
             if (CurrentHealth <= 0)
             {
-                CurrentHealth = 0;
                 DeathEvent?.Invoke();
             }
         }
 
         private void On_PlayerEnteredDeathZone()
         {
-            CurrentHealth = 0;
-            CheckForDeath();
+            SetHealth(0);
         }
     }
 }

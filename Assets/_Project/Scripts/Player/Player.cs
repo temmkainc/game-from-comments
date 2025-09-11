@@ -1,4 +1,5 @@
 using Comments.Player;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
@@ -14,21 +15,25 @@ namespace Comments.Level
         [field: SerializeField]
         public Transform ItemInHand { get; private set; }
 
-        private PlayerInputContainer _inputContainer;
         private LevelContainer _levelContainer;
         private Resizer _resizer;
-        private GameManager _gameManager;
+
+        private PlayerInputContainer _inputContainer;
         private PlayerMovement _movement;
+        private PlayerUI _ui;
 
         [Inject]
-        public void Construct(PlayerInputContainer playerInputContainer, LevelContainer levelContainer, GameManager gameManager)
+        public void Construct(PlayerInputContainer playerInputContainer, LevelContainer levelContainer)
         {
-            _levelContainer = levelContainer;
-            _gameManager = gameManager;
-            _inputContainer = playerInputContainer;
-            _resizer = new Resizer(transform);
             _movement = GetComponent<PlayerMovement>();
-            Health = new PlayerHealth(_levelContainer.DeathZone);
+
+            _levelContainer = levelContainer;
+            _inputContainer = playerInputContainer;
+
+            _resizer = new Resizer(transform);
+            _ui = new PlayerUI(_inputContainer);
+            Health = new PlayerHealth(_levelContainer.DeathZone, _ui);
+
             SubscribeToEvents();
         }
 
@@ -58,12 +63,15 @@ namespace Comments.Level
 
         private void On_Death()
         {
-            Respawn();
+            Respawn().AttachExternalCancellation(destroyCancellationToken).Forget();
         }
 
-        private void Respawn()
+        private async UniTask Respawn()
         {
+            await UniTask.Delay(500);
+
             _movement.Stop();
+            Health.ResetHealth();
             transform.position = _levelContainer.SpawnPoint.position;
         }
     }
