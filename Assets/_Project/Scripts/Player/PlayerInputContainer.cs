@@ -1,3 +1,4 @@
+using Comments.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,5 +13,5 @@ public class PlayerInputContainer : MonoBehaviour
     [field: SerializeField] public Sprite UpSizeSprite { get; private set; }
     [field: SerializeField] public Sprite DownSizeSprite { get; private set; }
     [Header("UI")]
-    [field: SerializeField] public Image HealthBar { get; private set; }
+    [field: SerializeField] public SmoothBar HealthBar { get; private set; }
 }
