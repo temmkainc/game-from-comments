@@ -3,6 +3,8 @@
 A small Unity game inspired by YouTube comments. 
 Each YouTube shorts is about implementing feature into the game - then I ask for a new one in the comments.
 
+https://www.youtube.com/@temmkainc
+
 <img width="1085" height="566" alt="image" src="https://github.com/user-attachments/assets/d7aa1b49-71cd-478f-b05a-46baad9cb9d5" />
 
 
