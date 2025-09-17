@@ -3,8 +3,6 @@ using Zenject;
 
 public class PlayerShooting : MonoBehaviour
 {
-    [SerializeField] private GunBase _startingGun;
-
     private Joystick _joystick;
     private IGun _currentGun;
 
@@ -14,13 +12,11 @@ public class PlayerShooting : MonoBehaviour
         _joystick = inputContainer.ShootingJoystick;
     }
 
-    private void Start()
-    {
-        EquipGun(_startingGun);
-    }
-
     private void Update()
     {
+        if (_currentGun == null)
+            return;
+
         Vector2 input = new Vector2(_joystick.Horizontal, _joystick.Vertical);
 
         if (input.sqrMagnitude > 0.1f)
@@ -40,6 +36,12 @@ public class PlayerShooting : MonoBehaviour
         if (_currentGun is GunBase oldGun)
         {
             Destroy(oldGun.gameObject);
+        }
+
+        if (newGun == null)
+        {
+            _currentGun = null;
+            return;
         }
 
         _currentGun = Instantiate(newGun, transform.position, Quaternion.identity, transform);

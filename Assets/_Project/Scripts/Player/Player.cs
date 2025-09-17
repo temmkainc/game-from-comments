@@ -8,19 +8,18 @@ namespace Comments.Level
 {
     public class Player : MonoBehaviour
     {
-        public PlayerHealth Health { get; private set; }
+        [field: SerializeField] public Animator Animator { get; private set; }
+        [field: SerializeField] public Transform ItemInHand { get; private set; }
+        [field: SerializeField] public PlayerShooting Shooting { get; private set; }
 
-        [field: SerializeField]
-        public Animator Animator { get; private set; }
-        [field: SerializeField]
-        public Transform ItemInHand { get; private set; }
+        public PlayerHealth Health { get; private set; }
+        public PlayerUI UI { get; private set; }
+        public Inventory Inventory { get; private set; }
 
         private LevelContainer _levelContainer;
         private Resizer _resizer;
-
         private PlayerInputContainer _inputContainer;
         private PlayerMovement _movement;
-        private PlayerUI _ui;
 
         [Inject]
         public void Construct(PlayerInputContainer playerInputContainer, LevelContainer levelContainer)
@@ -31,8 +30,15 @@ namespace Comments.Level
             _inputContainer = playerInputContainer;
 
             _resizer = new Resizer(transform);
-            _ui = new PlayerUI(_inputContainer);
-            Health = new PlayerHealth(_levelContainer.DeathZone, _ui);
+            UI = new PlayerUI(_inputContainer);
+            Health = new PlayerHealth(_levelContainer.DeathZone, UI);
+
+            Inventory = new Inventory(this, _inputContainer);
+            foreach (var item in _inputContainer.InitialItems)
+            {
+                Inventory.AddItem(item);
+            }
+
 
             SubscribeToEvents();
         }

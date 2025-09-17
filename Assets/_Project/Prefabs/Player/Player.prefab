@@ -149,6 +149,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Animator>k__BackingField: {fileID: 1169760930098377730}
   <ItemInHand>k__BackingField: {fileID: 77010126835760320}
+  <Shooting>k__BackingField: {fileID: 818629663403230316}
 --- !u!1 &742670130350921565
 GameObject:
   m_ObjectHideFlags: 0
@@ -544,7 +545,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edcf64264038aea439b68784fb81f518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _startingGun: {fileID: 7852271675293668546, guid: 12191593fab78f24480be44ac85a9cae, type: 3}
 --- !u!1 &3172110849302386219
 GameObject:
   m_ObjectHideFlags: 0

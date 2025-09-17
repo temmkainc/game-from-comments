@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace Comments.Level
 {
@@ -31,6 +32,7 @@ namespace Comments.Level
         public void ChangeHealth(int value)
         {
             CurrentHealth += value;
+            CurrentHealth = Mathf.Clamp(CurrentHealth, 0, MaxHealth);
             _ui.SetHealthBar(value: (float)CurrentHealth / MaxHealth);
             CheckForDeath();
         }
